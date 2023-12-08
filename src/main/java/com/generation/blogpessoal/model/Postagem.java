@@ -1,0 +1,71 @@
+package com.generation.blogpessoal.model;
+
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+@Entity
+@Table(name = "tb_postagens")
+
+public class Postagem {
+
+	@Id // aqui, estamos indicando a CHAVE PRIMARIA DA TABELA NO MYSQL
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // Aqui, estamos definindo do AUTO_INCREMENT do MYSQL
+	private Long id;
+	
+	@Column(length = 100)
+	@NotBlank(message = "O Atributo título é obrigatório!") // Aqui, estamos implementando o NOT NULL
+	@Size(min = 5, max = 100, message = "Por gentileza, insira um título que contenha no mínimo 5 e no máximo 100 caracteres") // Nesta linha, é como se estivessemos delimitando um varchar (100)
+	private String titulo;
+	
+	
+	@Column(length = 1000)
+	@NotBlank(message = "O Atributo texto é obrigatório!") // Aqui, estamos implementando o NOT NULL
+	@Size(min = 10, max = 1000, message = "Por gentileza, insira um texto que contenha no mínimo 10 e no máximo 1000 caracteres.") // A propriedade NOT BLANK só funciona com STRINGS pois ela só conta caracteres.
+	private String texto;
+
+	@UpdateTimestamp
+	private LocalDateTime data;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public String getTexto() {
+		return texto;
+	}
+
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
+
+	public LocalDateTime getData() {
+		return data;
+	}
+
+	public void setData(LocalDateTime data) {
+		this.data = data;
+	}
+
+}
