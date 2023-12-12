@@ -1,6 +1,5 @@
 package com.generation.blogpessoal.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,9 +17,9 @@ public class Tema {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length = 100)
+
 	@NotBlank(message = "O Atributo descrição é obrigatório!") 
-	@Size(max = 255, message = "Por gentileza, insira um tema.") 
+	@Size(max = 255, message = "Por gentileza, insira a descrição de um tema.") 
 	private String descricao;
 
 	public Long getId() {
