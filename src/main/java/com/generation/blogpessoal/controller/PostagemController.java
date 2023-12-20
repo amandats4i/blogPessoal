@@ -28,7 +28,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/postagens")
 @CrossOrigin(origins = "*", allowedHeaders = "*") /*
 													 * Temos que definir o CrossOrigin para liberar requisições de
-													 * outros servidores quqe vão acessar o front-end
+													 * outros servidores que vão acessar o front-end
 													 */
 
 public class PostagemController {
