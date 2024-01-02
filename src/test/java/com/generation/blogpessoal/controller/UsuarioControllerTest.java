@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.generation.blogpessoal.model.Usuario;
+import com.generation.blogpessoal.model.UsuarioLogin;
 import com.generation.blogpessoal.repository.UsuarioRepository;
 import com.generation.blogpessoal.service.UsuarioService;
 
@@ -25,7 +26,7 @@ import com.generation.blogpessoal.service.UsuarioService;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // AQUI, INDICAMOS QUE O CICLO DE VIDA DO TESTE É POR CLASSE.
 public class UsuarioControllerTest {
 
-	// Resposnável por enviar testes para API, igual ao Insomnia.
+	// Responsável por enviar testes para API, igual ao Insomnia.
 	@Autowired
 	private TestRestTemplate testRestTemplate;
 
@@ -83,7 +84,7 @@ public class UsuarioControllerTest {
 	public void deveAtualizarUsuario() {
 		
 		Optional<Usuario>usuarioCadastrado = usuarioService.cadastrarUsuario(
-				new Usuario(0L, "Kendal Katherine", "kendal@email.com.br", "12345678", " "));
+				new Usuario(0L, "Kendal Katherine", "kendal@email.com.br", "123456789", " "));
 
 		//Corpo da requisição
 		HttpEntity<Usuario> corpoRequisicao = new HttpEntity<Usuario>(
@@ -99,23 +100,53 @@ public class UsuarioControllerTest {
 	}
 	
 	@Test
-	@DisplayName("Deve Listar os Usuários 🙂")
-	public void deveListarTodosUsuarios() {
-		
-		usuarioService.cadastrarUsuario(new Usuario(
-				0L, "Amanda Tsai", "amanda@email.com.br", "12345678", " "));
-		
-		usuarioService.cadastrarUsuario(new Usuario(
-				0L, "Vitor Nascimento", "vitor@email.com.br", "12345678", " "));
+    @DisplayName("😀 Listar todos os usuários")
+    public void deveListarTodosOsUsuarios() {
 
-		//Requisição HTTP
-		ResponseEntity<String> corpoResposta = testRestTemplate
-				.withBasicAuth("root@root.com", "rootroot")
-				.exchange("/usuarios", HttpMethod.GET, null, String.class);
-		
-		//Verifica o HTTP Status Code
-		assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
-	}
+        usuarioService.cadastrarUsuario(new Usuario(0L,
+                "Vitor Nascimento", "vitor@email.com.br", "12345678", ""));
+        usuarioService.cadastrarUsuario(new Usuario(0L,
+                "Samara Almeida", "samara@email.com.br", "12345678", ""));
 
-	//CRIAR TESTE PARA BUSCAR POR ID E AUTENTICAR LOGAR (USER LOGIN)
+        //Requisição Http
+        
+        ResponseEntity<String> corpoResposta = testRestTemplate
+                .withBasicAuth("root@root.com", "rootroot")
+                .exchange("/usuarios", HttpMethod.GET, null, String.class);
+
+        assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
+
+    }
+	
+	// AUTENTICAÇÃO DE USUÁRIO 
+	@Test
+    @DisplayName("Deve Autenticar Usuário 🙂")
+    public void deveAutenticarUsuario() {
+        
+        UsuarioLogin usuarioLogin = new UsuarioLogin();
+        usuarioLogin.setUsuario("root@root.com");
+        usuarioLogin.setSenha("rootroot");
+
+        // Corpo da requisição
+        HttpEntity<UsuarioLogin> corpoRequisicao = new HttpEntity<UsuarioLogin>(usuarioLogin);
+     
+        // Requisição HTTP
+        ResponseEntity<UsuarioLogin> corpoResposta = testRestTemplate
+                .exchange("/usuarios/logar", HttpMethod.POST, corpoRequisicao, UsuarioLogin.class);
+
+        assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
+    }
+	
+	@Test
+    @DisplayName("Deve Buscar Usuário Por ID 🙂")
+    public void deveBuscarUsuarioId() {
+
+        usuarioService.cadastrarUsuario(new Usuario(0L, "Amanda Tsai", "amanda@email.com.br", "12345678", ""));
+        
+        // Requisição HTTP
+        ResponseEntity<String> corpoResposta = testRestTemplate.withBasicAuth("root@root.com", "rootroot")
+        		.exchange("/usuarios/id/1", HttpMethod.GET, null, String.class);
+        
+        assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
+    }
 }

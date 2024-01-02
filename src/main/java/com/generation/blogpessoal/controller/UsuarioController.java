@@ -1,5 +1,6 @@
 package com.generation.blogpessoal.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.blogpessoal.model.Usuario;
 import com.generation.blogpessoal.model.UsuarioLogin;
@@ -35,6 +35,11 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	@GetMapping
+    public ResponseEntity<List<Usuario>> getAll() {
+        return ResponseEntity.ok(usuarioRepository.findAll());
+    }
+	
 	
 	@PostMapping("/cadastrar") 
 	public ResponseEntity<Usuario> postUsuario(@Valid @RequestBody Usuario usuario){
@@ -46,26 +51,10 @@ public class UsuarioController {
 	
 	//PARA PODER ATUALIZAR, PRECISAMOS DEFINIR O TOKEN NO INSOMNIA EM "HEADERS"
 	@PutMapping("/atualizar") 
-	public Optional<Object> atualizarUsuario(@Valid @RequestBody Usuario usuario){
-		
-		if(usuarioRepository.findById(usuario.getId()).isPresent()) {
-			
-			Optional<Usuario> buscaUsuario = usuarioRepository.findByUsuario(usuario.getUsuario()); 
-				
-				if((buscaUsuario.isPresent()) && (buscaUsuario.get().getId() != usuario.getId()))
-						throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario já existe.", null);
-				
-				usuario.setSenha(criptografarSenha(usuario.getSenha()));
-				 return Optional.ofNullable(usuarioRepository.save(usuario));
-
-	    }
-		
-		return Optional.empty();
-	}
-	
-	private String criptografarSenha(String senha) {
-		
-		return null;
+	public ResponseEntity<Usuario> putUsuario(@Valid @RequestBody Usuario usuario){
+		return usuarioService.atualizarUsuario(usuario)
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 	}
 
 
