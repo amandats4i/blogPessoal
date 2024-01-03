@@ -27,17 +27,14 @@ public class Tema {
 	private String descricao;
 
 	// Aqui, estamos estabelecendo a relação entre as tabelas.
+		// O fetch é uma forma de carregar os dados de um bd durante uma busca. 
+		// Usamos o modo Lazy pois ele carrega os dados mas nao carrega o tema até seja estritamente
+		// solicitado. O cascade faz cascateamento dos dados. Todas as vezes que eu
+		// apagar um tema, ele apaga tudo o que está dentro dele.
+		// Mapped By serve para indicar qual objeto irá identificar sua chave estrangeira.
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tema", cascade = CascadeType.REMOVE) 
 	@JsonIgnoreProperties("tema") // Ele salva uma vez e ignora o tema.
-	
-	// O fetch é uma forma de carregar os dados de um bd durante uma busca. 
-	// Usamos o modo Lazy pois ele carrega os dados mas nao carrega o tema até seja estritamente
-	// solicitado. O cascade faz cascateamento dos dados. Todas as vezes que eu
-	// apagar um tema, ele apaga tudo o que está dentro dele.
-	// Mapped By serve para indicar qual objeto irá identificar sua chave estrangeira.
-	
-	
-	private List<Postagem> postagem;
+	private List<Postagem> postagem; 
 
 	public Long getId() {
 		return id;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,6 +30,7 @@ public class Usuario {
 	@NotNull(message = "O Atributo Nome é Obrigatório!")
 	private String nome;
 
+	@Schema(example = "email@email.com.br")
 	@NotNull(message = "O Atributo Usuário é Obrigatório!")
 	@Email(message = "O Atributo Usuário deve ser um email válido!")
 	private String usuario;
@@ -55,6 +57,7 @@ public class Usuario {
 		this.foto = foto;
 	}
 	
+	// METODO CONSTRUTOR VAZIO: caso a pessoa envie um objeto sem informação, esse construtor cria esse objeto atraves dos metodos get e set
 	public Usuario() {} 
 
 	/* Insira os Getters and Setters */

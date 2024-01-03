@@ -26,7 +26,7 @@ import com.generation.blogpessoal.service.UsuarioService;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // AQUI, INDICAMOS QUE O CICLO DE VIDA DO TESTE É POR CLASSE.
 public class UsuarioControllerTest {
 
-	// Responsável por enviar testes para API, igual ao Insomnia.
+	//Responsável por enviar testes para API, igual ao Insomnia.
 	@Autowired
 	private TestRestTemplate testRestTemplate;
 
@@ -100,7 +100,7 @@ public class UsuarioControllerTest {
 	}
 	
 	@Test
-    @DisplayName("😀 Listar todos os usuários")
+    @DisplayName("Listar todos os usuários 😀 ")
     public void deveListarTodosOsUsuarios() {
 
         usuarioService.cadastrarUsuario(new Usuario(0L,
@@ -112,7 +112,7 @@ public class UsuarioControllerTest {
         
         ResponseEntity<String> corpoResposta = testRestTemplate
                 .withBasicAuth("root@root.com", "rootroot")
-                .exchange("/usuarios", HttpMethod.GET, null, String.class);
+                .exchange("/usuarios/all", HttpMethod.GET, null, String.class);
 
         assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
 
